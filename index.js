@@ -7,11 +7,9 @@ const Groq = require("groq-sdk");
 const axios = require("axios");
 const apicache = require("apicache");
 const app = express();
-const cache = apicache.middleware;
-const API_URL = process.env.LEETCODE_API_URL || "https://leetcode.com/graphql";
-
+const API_URL = process.env.LEETCODE_API_URL;
+const query=require("./leetcode_query");
 app.use(cors());
-app.use(cache("5 minutes"));
 app.use(express.json());
 
 const groqApiKey = process.env.GROQ_API_KEY;
@@ -50,74 +48,7 @@ async function fetchGitHubStats(username) {
 
 async function fetchLeetCodeStats(username) {
     try {
-        const query = `#graphql
-query getUserProfile($username: String!) {
-    allQuestionsCount {
-        difficulty
-        count
-    }
-    matchedUser(username: $username) {
-        username
-        githubUrl
-        twitterUrl
-        linkedinUrl
-        contributions {
-            points
-            questionCount
-            testcaseCount
-        }
-        profile {
-            realName
-            userAvatar
-            birthday
-            ranking
-            reputation
-            websites
-            countryName
-            company
-            school
-            skillTags
-            aboutMe
-            starRating
-        }
-        badges {
-            id
-            displayName
-            icon
-            creationDate
-        }
-        upcomingBadges {
-            name
-            icon
-        }
-        activeBadge {
-            id
-            displayName
-            icon
-            creationDate
-        }
-        submitStats {
-            totalSubmissionNum {
-                difficulty
-                count
-                submissions
-            }
-            acSubmissionNum {
-                difficulty
-                count
-                submissions
-            }
-        }
-        submissionCalendar
-    }
-    recentSubmissionList(username: $username, limit: 20) {
-        title
-        titleSlug
-        timestamp
-        statusDisplay
-        lang
-    }
-}`;
+
 
         const variables = { username };
         const response = await axios.post(API_URL, { query, variables });
