@@ -5,7 +5,6 @@ const { body, validationResult } = require("express-validator");
 require("dotenv").config();
 const Groq = require("groq-sdk");
 const axios = require("axios");
-const apicache = require("apicache");
 const app = express();
 const API_URL = process.env.LEETCODE_API_URL;
 const query=require("./leetcode_query");
@@ -48,13 +47,12 @@ async function fetchGitHubStats(username) {
 
 async function fetchLeetCodeStats(username) {
     try {
-
-
         const variables = { username };
         const response = await axios.post(API_URL, { query, variables });
         if (response.data.errors) {
             throw new Error(response.data.errors[0].message);
         }
+        console.log(JSON.stringify(response.data));
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -80,7 +78,8 @@ app.post(
         const { username } = req.body;
         try {
             const stats = await fetchGitHubStats(username);
-            const prompt = `Roast this GitHub user humorously and very badly. Destroy their ego and make them feel like an imposter, all while amusing them. Address them directly using their name. Do not use any bold text and keep the roast brief and crisp . Here are their stats: ${JSON.stringify(
+            const prompt = `make sure keep it as shortest as possible under 200 characters, Roast this GitHub  user be very very very harsh humorously and start with his stats numbers and very badly. 
+            Destroy their ego and make them feel like an imposter, all while amusing them. Address them directly using their name. Do not use any bold text and keep the roast brief and crisp and make sure keep it shortest as possible. Here are their stats: ${JSON.stringify(
                 stats
             )}`;
             const roast = await getGroqData(prompt);
@@ -104,8 +103,10 @@ app.post(
         const { username } = req.body;
         try {
             const stats = await fetchLeetCodeStats(username);
-
-            const prompt = `Roast this LeetCode user in a hilariously devastating manner. Crush their confidence and make them question their existence as a coder.  Do not use any bold text and keep the roast brief and crisp . Use their name liberally. Stats: ${JSON.stringify(
+            const prompt = `make sure keep it as shortest as possible under 200 characters, Roast this LeetCode user be very very very harsh humorously in a devastating manner  
+            and start with his stats numbers tell how many easy,medium,hard questions and how they are like a child play from the total given with the key [allQuestionsCount] are the total questions out of which he has solved
+            and also donot mix "submissions" with questions solved both are different in acSubmissionNum "count" is the number of questions solved and submissions is how many time he submitted the correct solution 
+             and Crush their confidence and make them question their existence as a coder.  Do not use any bold text and keep the roast brief and crisp . Use their name repeatedly. Stats: ${JSON.stringify(
                 stats
             )}`;
 

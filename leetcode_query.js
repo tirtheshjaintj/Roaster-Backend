@@ -1,14 +1,7 @@
 const query = `#graphql
 query getUserProfile($username: String!) {
-    allQuestionsCount {
-        difficulty
-        count
-    }
     matchedUser(username: $username) {
         username
-        githubUrl
-        twitterUrl
-        linkedinUrl
         contributions {
             points
             questionCount
@@ -16,14 +9,10 @@ query getUserProfile($username: String!) {
         }
         profile {
             realName
-            userAvatar
             birthday
             ranking
             reputation
-            websites
             countryName
-            company
-            school
             skillTags
             aboutMe
             starRating
@@ -31,17 +20,14 @@ query getUserProfile($username: String!) {
         badges {
             id
             displayName
-            icon
             creationDate
         }
         upcomingBadges {
             name
-            icon
         }
         activeBadge {
             id
             displayName
-            icon
             creationDate
         }
         submitStats {
@@ -56,15 +42,11 @@ query getUserProfile($username: String!) {
                 submissions
             }
         }
-        submissionCalendar
     }
-    recentSubmissionList(username: $username, limit: 20) {
-        title
-        titleSlug
-        timestamp
-        statusDisplay
-        lang
-    }
+     allQuestionsCount {
+       difficulty
+       count
+       }
 }`;
 
-module.exports= query;
+module.exports = query;
